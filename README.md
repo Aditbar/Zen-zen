@@ -1,2 +1,2 @@
 # Zen-zen
-experiment using clojure @akrisna21
+experiment using clojure
