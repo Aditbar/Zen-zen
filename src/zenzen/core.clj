@@ -14,8 +14,9 @@
 
 ;;(seq (.list (clojure.java.io/file "resources/Seal")))
 
-(map #(.getPath %)
-     (file-seq (clojure.java.io/file ".")))
+(def get-path
+  (map #(.getPath %)
+      (file-seq (clojure.java.io/file "."))))
 
 (clojure.string/split "./src/zenzen/core.clj" #"/")
 
@@ -26,8 +27,13 @@
 
 (filter #(= (count %) 4) bla)
 
-
-
 (def directory (clojure.java.io/file "resource/Seal"))
 (def files (file-seq directory))
 (take 10 files)
+
+(->> get-path
+     (map #(clojure.string/split % #"/"))
+     (map #(drop 2 %))
+     (filter #(= (count %) 4))
+     (map #(zipmap % '(:a :b :c :d)))
+     (map #(clojure.set/map-invert %)))
