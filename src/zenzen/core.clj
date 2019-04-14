@@ -16,7 +16,7 @@
 
 (def get-path
   (map #(.getPath %)
-      (file-seq (clojure.java.io/file "."))))
+      (file-seq (clojure.java.io/file "./resources/Seal"))))
 
 (clojure.string/split "./src/zenzen/core.clj" #"/")
 
