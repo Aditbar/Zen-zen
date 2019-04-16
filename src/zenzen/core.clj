@@ -14,26 +14,32 @@
 
 ;;(seq (.list (clojure.java.io/file "resources/Seal")))
 
-(def get-path
+(defn get-path
+  [path]
   (map #(.getPath %)
-      (file-seq (clojure.java.io/file "./resources/Seal"))))
+       (file-seq (clojure.java.io/file path))))
 
-(clojure.string/split "./src/zenzen/core.clj" #"/")
+;; (clojure.string/split "./src/zenzen/core.clj" #"/")
 
-(map #(clojure.string/split % #"/") '("./resources/Seal/warrior/Barbarian"
-                                       "./resources/Seal/warrior/Barbarian/Haruw.txt"))
+;; (map #(clojure.string/split % #"/") '("./resources/Seal/warrior/Barbarian"
+;;                                       "./resources/Seal/warrior/Barbarian/Haruw.txt"))
 
-(map #(drop 2 %) bla)
+;; (map #(drop 2 %) bla)
 
-(filter #(= (count %) 4) bla)
+;; (filter #(= (count %) 4) bla)
 
-(def directory (clojure.java.io/file "resource/Seal"))
-(def files (file-seq directory))
-(take 10 files)
+;; (def directory (clojure.java.io/file "resource/Seal"))
+;; (def files (file-seq directory))
+;; (take 10 files)
 
-(->> get-path
-     (map #(clojure.string/split % #"/"))
-     (map #(drop 2 %))
-     (filter #(= (count %) 4))
-     (map #(zipmap % '(:a :b :c :d)))
-     (map #(clojure.set/map-invert %)))
+(defn mapping
+  [main-path]
+  (->>
+    (get-path main-path)
+    (map #(clojure.string/split % #"/"))
+    (map #(drop 2 %))
+    (filter #(= (count %) 4))
+    (map #(zipmap % '(:a :b :c :d)))
+    (map #(clojure.set/map-invert %))))
+
+(mapping "./resources/Seal")
