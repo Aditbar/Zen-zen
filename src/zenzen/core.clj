@@ -5,6 +5,10 @@
             [clojure.string :as cs]
             [clojure.set :refer :all]))
 
+(use 'clojure.java.io)
+
+;; find . -name '.DS_Store' -type f -delete
+
 (def asa
   (->> "resources/Seal"
        clojure.java.io/file
@@ -13,24 +17,30 @@
        ))
 
 ;;(seq (.list (clojure.java.io/file "resources/Seal")))
+(def a
+  "./resources/DN/Elf/Darkness/Mara/black mara/Argenta.txt")
+
+(def b
+  "./resources")
 
 (defn get-path
   [path]
   (map #(.getPath %)
        (file-seq (clojure.java.io/file path))))
 
-;; (clojure.string/split "./src/zenzen/core.clj" #"/")
+;; ambil data tiap file
+(->> "./resources/DN"
+     (get-path)
+     (filter #(= 5 ((frequencies %) \/)))
+     (map #(slurp %)))
 
-;; (map #(clojure.string/split % #"/") '("./resources/Seal/warrior/Barbarian"
-;;                                       "./resources/Seal/warrior/Barbarian/Haruw.txt"))
+(defn read_txt
+  [full_path]
+  (with-open [rdr (reader full_path)]
+   (doseq [line (line-seq rdr)]
+     (println line))))
 
-;; (map #(drop 2 %) bla)
 
-;; (filter #(= (count %) 4) bla)
-
-;; (def directory (clojure.java.io/file "resource/Seal"))
-;; (def files (file-seq directory))
-;; (take 10 files)
 
 (defn mapping
   [main-path]
@@ -42,4 +52,10 @@
     (map #(zipmap % '(:a :b :c :d)))
     (map #(clojure.set/map-invert %))))
 
-(mapping "./resources/Seal")
+(mapping "./resources/DN")
+
+;; effective way
+(->> "./resources/DN"
+     (get-path)
+     (filter #(= 7 ((frequencies %) \/)))
+     )
