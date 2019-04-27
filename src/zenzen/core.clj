@@ -6,6 +6,7 @@
             [clojure.set :refer :all]))
 
 (use 'clojure.java.io)
+(require '[clojure.string :as string])
 
 ;; find . -name '.DS_Store' -type f -delete
 
@@ -22,6 +23,30 @@
 
 (def b
   "./resources")
+
+;; problem
+(def c
+  ["Master Sorceress Stella is an experienced Sorceress who resides in Saint Haven. She has great interest in real estate investment, but hasn't made much profit from it."
+   ""
+   "She is always conducting strange experiments that annoy others around her. "])
+
+(string/join " " (remove string/blank? c))
+
+;; bikin map soal
+(def value
+  (->> "./resources/DN"
+      (get-path)
+      (filter #(= 7 ((frequencies %) \/)))
+      (map #(coba %))
+      (map #(string/join " " (remove string/blank? %)))
+      baal))
+
+;; mgetrik buat dapet map yg key soal
+(defn baal
+  [list_string]
+  (zipmap list_string (repeat :soal)))
+
+;;
 
 (defn get-path
   [path]
@@ -40,8 +65,6 @@
    (doseq [line (line-seq rdr)]
      (println line))))
 
-
-
 (defn mapping
   [main-path]
   (->>
@@ -59,3 +82,29 @@
      (get-path)
      (filter #(= 7 ((frequencies %) \/)))
      )
+
+(defn coba
+  [a]
+  (-> a
+     slurp
+     (clojure.string/replace #"\d" "")
+     clojure.string/split-lines))
+
+;; subjek, topik, subtopik, kompetensi, indikator, dokumen, soal
+
+(def amir
+  (->> "./resources/DN"
+       (get-path)
+       (filter #(= 7 ((frequencies %) \/)))
+       (map #(coba %))
+       (map #(string/join " " (remove string/blank? %)))
+       ;;baal
+       ))
+
+(def budi (->>
+            (get-path "./resources/DN")
+            (map #(clojure.string/split % #"/"))
+            (map #(drop 2 %))
+            (filter #(= (count %) 4))))
+
+(map list budi amir)
