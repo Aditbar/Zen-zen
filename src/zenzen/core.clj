@@ -89,7 +89,8 @@
   (-> a
      slurp
      (clojure.string/replace #"\d" "")
-     clojure.string/split-lines))
+     clojure.string/split-lines)
+  )
 
 ;; subjek, topik, subtopik, kompetensi, indikator, dokumen, soal
 
@@ -99,6 +100,9 @@
        (filter #(= 7 ((frequencies %) \/)))
        (map #(coba %))
        (map #(string/join " " (remove string/blank? %)))
+       (map vector)
+       (map #(zipmap % (repeat :soal)))
+       (map #(clojure.set/map-invert %))
        ))
 
 (def budi (->>
@@ -110,8 +114,8 @@
             (map #(clojure.set/map-invert %))
             ))
 
-(def gabung
-  (map list budi amir))
+(def list_of_map
+  (map merge budi amir))
 
 
 (defn write-dataset-edn! [out-file raw-dataset-map]
