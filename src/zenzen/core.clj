@@ -7,6 +7,7 @@
 
 (use 'clojure.java.io)
 (require '[clojure.string :as string])
+(require '[clojure.edn :as edn])
 
 ;; find . -name '.DS_Store' -type f -delete
 
@@ -98,13 +99,23 @@
        (filter #(= 7 ((frequencies %) \/)))
        (map #(coba %))
        (map #(string/join " " (remove string/blank? %)))
-       ;;baal
        ))
 
 (def budi (->>
             (get-path "./resources/DN")
             (map #(clojure.string/split % #"/"))
             (map #(drop 2 %))
-            (filter #(= (count %) 4))))
+            (filter #(= (count %) 6))
+            (map #(zipmap % '(:subjek :topik :subtopik :kompetensi :indikator :dokumen)))
+            (map #(clojure.set/map-invert %))
+            ))
 
-(map list budi amir)
+(def gabung
+  (map list budi amir))
+
+
+(defn write-dataset-edn! [out-file raw-dataset-map]
+  (with-open [w (clojure.java.io/writer out-file)]
+    (binding [*out* w]
+      (clojure.pprint/write raw-dataset-map))))
+
